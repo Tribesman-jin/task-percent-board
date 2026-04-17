@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>任务完成比例看板</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <div>
+          <h1>任务进度板</h1>
+          <p class="author-line">作者：郑州大学 ljk；邮箱：lijinke_zzu@zzu.edu.cn</p>
+          <p class="subtitle">
+            任务彼此并行，不需要前后依赖。你可以为每个任务手动补充“哪天到了多少进度”，像施工记录一样往进度条上加标注。
+          </p>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">整体完成度</div>
+          <div class="summary-value"><span id="overallPercent">0</span>%</div>
+          <div class="summary-bar">
+            <div id="overallBar" class="summary-fill"></div>
+          </div>
+          <div id="overallMeta" class="summary-meta">0 个任务 · 0 条标注</div>
+        </div>
+      </section>
+
+      <section class="panel controls">
+        <div class="control-grid">
+          <label>
+            <span>任务名称</span>
+            <input id="taskName" type="text" placeholder="例如：地基施工" />
+          </label>
+          <div class="control-note">
+            只需要填任务名，创建时间会自动记录。之后在任务卡片里按日期补充进度标注。
+          </div>
+        </div>
+        <div class="control-actions">
+          <button id="addTaskBtn" class="primary-btn">添加任务</button>
+          <div class="export-panel">
+            <label class="export-date-label">
+              <span>导出日期</span>
+              <input id="exportDate" type="date" />
+            </label>
+            <button id="exportMarkdownBtn" type="button" class="ghost-btn export-btn">导出 Markdown</button>
+            <button id="exportBoardBtn" type="button" class="ghost-btn export-btn">导出看板备份</button>
+            <button id="importBoardBtn" type="button" class="ghost-btn export-btn">导入看板备份</button>
+            <button id="newBlankBoardBtn" type="button" class="danger-btn export-btn subtle-danger">
+              新建空白看板
+            </button>
+            <input id="importBoardInput" type="file" accept="application/json,.json" hidden />
+          </div>
+        </div>
+      </section>
+
+      <section class="panel board">
+        <div class="board-tabs" role="tablist" aria-label="任务分组">
+          <button type="button" class="tab-btn active" data-view="active" role="tab" aria-selected="true">
+            进行中任务
+          </button>
+          <button type="button" class="tab-btn" data-view="folded" role="tab" aria-selected="false">
+            折叠的任务
+          </button>
+          <div id="dynamicTagTabs" class="tag-tabs" aria-label="任务标签页"></div>
+        </div>
+
+        <div class="board-view active" data-view-panel="active">
+          <div class="view-toolbar">
+            <div class="view-title">进行中任务</div>
+            <div class="view-hint">可拖到下方折叠区，或点“折叠任务”。</div>
+          </div>
+          <div class="drop-zone" data-drop-zone="fold">
+            拖到这里可折叠任务
+          </div>
+          <div id="taskListActive" class="task-list"></div>
+        </div>
+
+        <div class="board-view" data-view-panel="folded" hidden>
+          <div class="view-toolbar">
+            <div class="view-title">折叠的任务</div>
+            <div class="view-hint">可以拖到这里，或者点“恢复任务”把它拉出来。</div>
+          </div>
+          <div class="drop-zone restore" data-drop-zone="restore">
+            拖到这里可恢复到进行中
+          </div>
+          <div id="taskListFolded" class="task-list"></div>
+        </div>
+
+        <div class="board-view" data-view-panel="tagged" hidden>
+          <div class="view-toolbar">
+            <div class="view-title" id="taggedViewTitle">标签任务</div>
+            <div class="view-hint" id="taggedViewHint">按标签颜色分类查看任务。</div>
+          </div>
+          <div id="taskListTagged" class="task-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <template id="taskTemplate">
+      <article class="task-card">
+        <header class="task-head">
+          <div class="task-head-main">
+            <h2 class="task-title"></h2>
+            <div class="task-meta"></div>
+            <div class="task-tag-tools">
+              <div class="task-tag-input-row">
+                <input class="task-tag-input" type="text" placeholder="输入标签，回车添加" />
+                <button type="button" class="ghost-btn add-tag-btn">添加标签</button>
+              </div>
+              <div class="task-tag-list"></div>
+            </div>
+          </div>
+          <div class="task-head-actions">
+            <div class="task-stat">
+              <div class="stat-label">当前进度</div>
+              <div class="stat-value"></div>
+            </div>
+            <div class="task-action-row">
+              <button type="button" class="ghost-btn edit-task-btn">编辑名称</button>
+              <button type="button" class="ghost-btn toggle-task-btn">折叠任务</button>
+              <button type="button" class="danger-btn delete-task-btn">删除任务</button>
+            </div>
+          </div>
+        </header>
+
+        <div class="chart-wrap">
+          <div class="chart-axis">
+            <span>0%</span>
+            <span>100%</span>
+          </div>
+          <div class="task-chart">
+            <div class="chart-empty"></div>
+            <div class="chart-complete"></div>
+            <div class="chart-dashed"></div>
+            <div class="chart-points"></div>
+          </div>
+        </div>
+
+        <div class="milestone-list"></div>
+
+        <form class="milestone-form">
+          <label>
+            <span>日期</span>
+            <input class="mark-date" type="date" />
+          </label>
+          <label>
+            <span>完成比例</span>
+            <input class="mark-percent" type="number" min="0" max="100" step="1" value="0" />
+          </label>
+          <label>
+            <span>文字标注</span>
+            <input class="mark-note" type="text" placeholder="例如：完成模板搭设" />
+          </label>
+          <button type="button" class="ghost-btn add-mark-btn">添加标注</button>
+        </form>
+      </article>
+    </template>
+
+    <template id="milestoneTemplate">
+      <span class="mark-chip">
+        <span class="mark-text"></span>
+        <button type="button" class="mark-remove" aria-label="删除标注">×</button>
+      </span>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
