@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "exportedAt": "2026-04-15T08:00:00.000Z",
+  "tasks": [
+    {
+      "id": "example-task-1",
+      "name": "施工示例任务",
+      "createdAt": "2026-03-28",
+      "status": "active",
+      "tags": ["施工", "演示"],
+      "marks": [
+        {
+          "id": "example-task-1-mark-1",
+          "date": "2026-04-01",
+          "percent": 10,
+          "note": "开始准备场地"
+        },
+        {
+          "id": "example-task-1-mark-2",
+          "date": "2026-04-08",
+          "percent": 35,
+          "note": "完成基础施工"
+        },
+        {
+          "id": "example-task-1-mark-3",
+          "date": "2026-04-14",
+          "percent": 62,
+          "note": "主体推进中"
+        }
+      ]
+    },
+    {
+      "id": "example-task-2",
+      "name": "科研汇报",
+      "createdAt": "2026-03-25",
+      "status": "folded",
+      "tags": ["科研", "汇报"],
+      "marks": [
+        {
+          "id": "example-task-2-mark-1",
+          "date": "2026-04-03",
+          "percent": 20,
+          "note": "整理参考文献"
+        },
+        {
+          "id": "example-task-2-mark-2",
+          "date": "2026-04-10",
+          "percent": 55,
+          "note": "完成初稿"
+        },
+        {
+          "id": "example-task-2-mark-3",
+          "date": "2026-04-15",
+          "percent": 72,
+          "note": "等待修改意见"
+        }
+      ]
+    },
+    {
+      "id": "example-task-3",
+      "name": "生活记录板",
+      "createdAt": "2026-04-02",
+      "status": "active",
+      "tags": ["生活"],
+      "marks": [
+        {
+          "id": "example-task-3-mark-1",
+          "date": "2026-04-05",
+          "percent": 15,
+          "note": "开始整理待办"
+        },
+        {
+          "id": "example-task-3-mark-2",
+          "date": "2026-04-12",
+          "percent": 40,
+          "note": "完成一部分计划"
+        }
+      ]
+    },
+    {
+      "id": "example-task-4",
+      "name": "专利撰写",
+      "createdAt": "2026-04-06",
+      "status": "active",
+      "tags": ["专利撰写"],
+      "marks": [
+        {
+          "id": "example-task-4-mark-1",
+          "date": "2026-04-06",
+          "percent": 5,
+          "note": "搭建框架"
+        },
+        {
+          "id": "example-task-4-mark-2",
+          "date": "2026-04-11",
+          "percent": 25,
+          "note": "补充实施例"
+        },
+        {
+          "id": "example-task-4-mark-3",
+          "date": "2026-04-15",
+          "percent": 37,
+          "note": "继续完善描述"
+        }
+      ]
+    }
+  ]
+}
