@@ -2,8 +2,10 @@
 作者：郑州大学 ljk；邮箱：lijinke_zzu@zzu.edu.cn
 
 这是一个用于记录任务完成进度的轻量看板，适合施工记录、项目跟踪、学习计划、任务管理等场景。
-![演示图](task-percent-board/Example/pic1.jpg)
-![演示图](task-percent-board/Example/pic2.jpg)
+
+![演示图](Example/pic1.jpg)
+![演示图](Example/pic2.jpg)
+
 ## 功能
 
 - 添加多个任务
